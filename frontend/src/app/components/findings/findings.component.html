@@ -1,0 +1,139 @@
+<div class="findings-container animate-fade-in">
+  <!-- Top Filter & Search Bar -->
+  <section class="filter-bar glass-panel">
+    <div class="filter-group">
+      <!-- Search Input -->
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input 
+          type="text" 
+          [(ngModel)]="searchQuery" 
+          placeholder="Search CVE, package name, rule ID, or file..." 
+          class="search-input">
+      </div>
+
+      <!-- Asset Select -->
+      <div class="select-wrapper">
+        <label class="filter-label">ASSET</label>
+        <select [(ngModel)]="selectedAsset" class="filter-select">
+          <option value="ALL">All Products (3)</option>
+          <option value="docfolio">docfolio</option>
+          <option value="nexus">nexus</option>
+          <option value="vindicator-gaming">vindicator-gaming</option>
+        </select>
+      </div>
+
+      <!-- Scanner Select -->
+      <div class="select-wrapper">
+        <label class="filter-label">SCANNER</label>
+        <select [(ngModel)]="selectedScanner" class="filter-select">
+          <option value="ALL">All Scanners (6)</option>
+          <option value="TRIVY">TRIVY</option>
+          <option value="SEMGREP">SEMGREP</option>
+          <option value="GITLEAKS">GITLEAKS</option>
+          <option value="CHECKOV">CHECKOV</option>
+          <option value="OSV-SCANNER">OSV-SCANNER</option>
+          <option value="TRUFFLEHOG">TRUFFLEHOG</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Severity Pill Filters -->
+    <div class="pill-group">
+      <span class="pill-label">SEVERITY:</span>
+      <button class="pill-btn" [class.active]="selectedSeverity === 'ALL'" (click)="selectedSeverity = 'ALL'">ALL</button>
+      <button class="pill-btn pill-crit" [class.active]="selectedSeverity === 'CRITICAL'" (click)="selectedSeverity = 'CRITICAL'">CRITICAL</button>
+      <button class="pill-btn pill-high" [class.active]="selectedSeverity === 'HIGH'" (click)="selectedSeverity = 'HIGH'">HIGH</button>
+      <button class="pill-btn pill-med" [class.active]="selectedSeverity === 'MEDIUM'" (click)="selectedSeverity = 'MEDIUM'">MEDIUM</button>
+      <button class="pill-btn pill-low" [class.active]="selectedSeverity === 'LOW'" (click)="selectedSeverity = 'LOW'">LOW</button>
+    </div>
+
+    <!-- Status Pill Filters -->
+    <div class="pill-group">
+      <span class="pill-label">STATUS:</span>
+      <button class="pill-btn" [class.active]="selectedStatus === 'ALL'" (click)="selectedStatus = 'ALL'">ALL</button>
+      <button class="pill-btn" [class.active]="selectedStatus === 'OPEN'" (click)="selectedStatus = 'OPEN'">OPEN</button>
+      <button class="pill-btn" [class.active]="selectedStatus === 'RESOLVED'" (click)="selectedStatus = 'RESOLVED'">RESOLVED</button>
+      <button class="pill-btn" [class.active]="selectedStatus === 'FALSE_POSITIVE'" (click)="selectedStatus = 'FALSE_POSITIVE'">FALSE POSITIVE</button>
+
+      <button class="btn-reset" (click)="resetFilters()" *ngIf="selectedAsset !== 'ALL' || selectedScanner !== 'ALL' || selectedSeverity !== 'ALL' || selectedStatus !== 'ALL' || searchQuery">
+        ✕ Reset
+      </button>
+    </div>
+  </section>
+
+  <!-- Findings Count Summary -->
+  <div class="results-header">
+    <span class="results-count">Showing <strong>{{ filteredFindings.length }}</strong> of {{ findings.length }} security findings</span>
+  </div>
+
+  <!-- Findings List -->
+  <div class="findings-list">
+    <div *ngFor="let finding of filteredFindings" class="finding-card glass-card">
+      <div class="card-left">
+        <!-- Badge row -->
+        <div class="badges-row">
+          <span 
+            class="badge" 
+            [ngClass]="{
+              'badge-critical': finding.severity === 'CRITICAL',
+              'badge-high': finding.severity === 'HIGH',
+              'badge-medium': finding.severity === 'MEDIUM',
+              'badge-low': finding.severity === 'LOW'
+            }">
+            {{ finding.severity }}
+          </span>
+          <span class="badge badge-cyan">{{ finding.scanner }}</span>
+          <span class="asset-tag">📦 {{ finding.asset }}</span>
+        </div>
+
+        <!-- Title & CVE -->
+        <h3 class="finding-title">{{ finding.title }}</h3>
+        <p class="finding-desc">{{ finding.description }}</p>
+
+        <!-- Location / Target info -->
+        <div class="finding-target font-mono">
+          <span>🎯 Target: <strong>{{ finding.packageOrFile }}</strong></span>
+          <span *ngIf="finding.installedVersion" class="ver-badge">Installed: <code>{{ finding.installedVersion }}</code></span>
+          <span *ngIf="finding.fixedVersion" class="ver-fixed">Fix Available: <code>{{ finding.fixedVersion }}</code></span>
+        </div>
+
+        <!-- Automated Remediation instructions -->
+        <div class="remediation-row">
+          <span class="rem-tag badge-cyan">⚡ {{ finding.remediationType }}</span>
+          <span class="rem-text font-mono">{{ finding.ossRemediationReference }}</span>
+        </div>
+      </div>
+
+      <!-- Right controls: Status switcher -->
+      <div class="card-right">
+        <label class="status-label">STATUS</label>
+        <select 
+          [ngModel]="finding.status" 
+          (ngModelChange)="onStatusChange(finding.findingId, $event)"
+          class="status-select" 
+          [ngClass]="{
+            'status-open': finding.status === 'OPEN',
+            'status-resolved': finding.status === 'RESOLVED',
+            'status-fp': finding.status === 'FALSE_POSITIVE'
+          }">
+          <option value="OPEN">● OPEN</option>
+          <option value="RESOLVED">✓ RESOLVED</option>
+          <option value="FALSE_POSITIVE">∅ FALSE POSITIVE</option>
+        </select>
+        <span class="timestamp-label">First seen: {{ finding.firstSeenAt | date:'shortDate' }}</span>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="filteredFindings.length === 0" class="empty-state glass-panel">
+      <div class="empty-icon">🛡️</div>
+      <h3>No Security Findings Match Current Filters</h3>
+      <p>All scanned Vindicator products are secure against the selected filter criteria.</p>
+      <button class="btn-scan mt-4" (click)="resetFilters()">Reset All Filters</button>
+    </div>
+  </div>
+</div>

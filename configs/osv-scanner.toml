@@ -1,0 +1,5 @@
+# Vindicator OSV-Scanner Ignore Configuration
+[[IgnoredVulns]]
+# Ignore specific mock/test vulnerability IDs if needed
+# id = "CVE-XXXX-XXXX"
+# reason = "Test fixture only"

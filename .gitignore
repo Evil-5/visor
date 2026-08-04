@@ -1,0 +1,89 @@
+# ==========================================
+# Vindicator Security Control Plane .gitignore
+# ==========================================
+
+# --- Java & Maven ---
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+*.log
+dependency-reduced-pom.xml
+build/
+.gradle/
+
+# --- Angular & Node ---
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+*.tsbuildinfo
+
+# --- Python & Virtual Environments ---
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# --- IDE & Editors ---
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.iml
+*.iws
+*.ipr
+*.swp
+*~
+*.sublime-project
+*.sublime-workspace
+
+# --- OS Generated Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# --- Docker & Environment Secrets ---
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+*.cert
+*.pkcs12
+*.pfx
+
+# --- Temporary Scan Reports & Test Artifacts ---
+scan_results/
+reports/
+*.sarif
+*.json.tmp
+*.xml.tmp
+test-output/
+
+# --- Antigravity & Agent Artifacts ---
+.gemini/
+.system_generated/
+brain/
+scratch/

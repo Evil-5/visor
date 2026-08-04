@@ -1,0 +1,3 @@
+# Vindicator Trivy Ignore File
+# Ignore mock/test CVEs or false positive IDs if needed
+# e.g. CVE-2023-XXXXX

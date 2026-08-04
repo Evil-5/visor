@@ -1,0 +1,233 @@
+.dashboard-container {
+  max-width: 1540px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Hero Panel */
+.hero-panel {
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  border-left: 4px solid var(--accent-cyan);
+  box-shadow: 0 8px 32px hsla(0, 0%, 0%, 0.35);
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-title {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+.hero-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  max-width: 820px;
+}
+
+/* Stat Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stat-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.stat-icon {
+  font-size: 1.35rem;
+}
+
+.stat-value {
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+}
+
+.text-critical { color: var(--sev-critical); }
+.text-high { color: var(--sev-high); }
+.text-cyan { color: var(--accent-cyan); }
+
+.stat-footer {
+  display: flex;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.stat-sub {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Severity Distribution Meter */
+.severity-section {
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+.section-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.severity-bar-container {
+  height: 16px;
+  width: 100%;
+  background: hsla(220, 20%, 20%, 0.5);
+  border-radius: 9999px;
+  overflow: hidden;
+  display: flex;
+  box-shadow: inset 0 2px 4px hsla(0, 0%, 0%, 0.4);
+}
+
+.severity-segment {
+  height: 100%;
+  transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.seg-critical { background: var(--sev-critical); }
+.seg-high { background: var(--sev-high); }
+.seg-medium { background: var(--sev-medium); }
+.seg-low { background: var(--sev-low); }
+
+.severity-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  align-items: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot-critical { background: var(--sev-critical); box-shadow: 0 0 8px var(--sev-critical); }
+.dot-high { background: var(--sev-high); }
+.dot-medium { background: var(--sev-medium); }
+.dot-low { background: var(--sev-low); }
+
+/* Scanners Health Grid */
+.scanners-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.scanners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.scanner-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.scanner-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.scanner-title {
+  font-size: 1.08rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fff;
+}
+
+.scanner-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.scanner-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-glass);
+  padding-top: 14px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.scanner-count {
+  color: var(--text-primary);
+}
+
+.scanner-link {
+  color: var(--accent-cyan);
+  transition: transform 0.2s;
+}
+
+.scanner-card:hover .scanner-link {
+  transform: translateX(4px);
+}
+
+.mb-4 { margin-bottom: 16px; }

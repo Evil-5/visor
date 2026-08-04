@@ -1,0 +1,25 @@
+title = "Vindicator Custom Gitleaks Configuration"
+
+# Exclude common noise directories such as Python virtual environments (.venv), node_modules, build targets, and test fixtures
+[allowlist]
+description = "Vindicator Global Ignore List for .venv, node_modules, test fixtures, and mock samples"
+paths = [
+    '''(\\|\/)\.venv(\\|\/)'',
+    '''(\\|\/)venv(\\|\/)'',
+    '''(\\|\/)node_modules(\\|\/)'',
+    '''(\\|\/)\.bin(\\|\/)'',
+    '''(\\|\/)security_audit(\\|\/)'',
+    '''(\\|\/)target(\\|\/)'',
+    '''(\\|\/)dist(\\|\/)'',
+    '''(\\|\/)test(\\|\/)'',
+    '''(\\|\/)tests(\\|\/)'',
+    '''(\\|\/)fixtures(\\|\/)'''
+]
+regexes = [
+    '''EXAMPLE_[A-Z0-9_]+''',
+    '''sample_api_key.*''',
+    '''mock_[a-z0-9_]+''',
+    '''test_[a-z0-9_]+_token''',
+    '''00000000-0000-0000-0000-000000000000''',
+    '''1234567890abcdef1234567890abcdef'''
+]

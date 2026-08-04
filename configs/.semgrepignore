@@ -1,0 +1,18 @@
+# Vindicator Semgrep Ignore Rules
+# Ignore virtual environments and dependency caches
+.venv/
+venv/
+node_modules/
+.bin/
+security_audit/
+target/
+dist/
+build/
+*.min.js
+*.min.css
+
+# Ignore test and mock fixtures
+test/
+tests/
+fixtures/
+mock/

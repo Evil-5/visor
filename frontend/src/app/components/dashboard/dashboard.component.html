@@ -1,0 +1,175 @@
+<div class="dashboard-container animate-fade-in" *ngIf="summary">
+  <!-- Hero Banner -->
+  <section class="hero-panel glass-panel">
+    <div class="hero-left">
+      <h1 class="hero-title">EXECUTIVE SECURITY POSTURE</h1>
+      <p class="hero-subtitle">
+        Real-time continuous vulnerability aggregation, secret detection, and automated OSS remediation across Vindicator products (<strong>DocFolio</strong>, <strong>Nexus</strong>, <strong>Vindicator Gaming</strong>).
+      </p>
+    </div>
+    <div class="hero-right">
+      <div class="hero-badge">
+        <span class="badge badge-cyan">🔒 SECURE CONTROL PLANE v1.0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stat Summary Cards Grid -->
+  <section class="stats-grid">
+    <div class="stat-card glass-card" (click)="onCardClick('findings')">
+      <div class="stat-header">
+        <span class="stat-label">TOTAL OPEN FINDINGS</span>
+        <span class="stat-icon">🛡️</span>
+      </div>
+      <div class="stat-value">{{ summary.totalOpenFindings }}</div>
+      <div class="stat-footer">
+        <span class="stat-sub">Across 6 automated scanners</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-critical glass-card" (click)="onCardClick('findings')">
+      <div class="stat-header">
+        <span class="stat-label">CRITICAL SEVERITY</span>
+        <span class="stat-icon">🚨</span>
+      </div>
+      <div class="stat-value text-critical">{{ summary.criticalCount }}</div>
+      <div class="stat-footer">
+        <span class="badge badge-critical">IMMEDIATE ATTENTION</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-high glass-card" (click)="onCardClick('findings')">
+      <div class="stat-header">
+        <span class="stat-label">HIGH &amp; MEDIUM SEVERITY</span>
+        <span class="stat-icon">⚠️</span>
+      </div>
+      <div class="stat-value text-high">{{ summary.highCount + summary.mediumCount }}</div>
+      <div class="stat-footer">
+        <span class="stat-sub">{{ summary.highCount }} High · {{ summary.mediumCount }} Medium</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-remediation glass-card" (click)="onCardClick('remediation')">
+      <div class="stat-header">
+        <span class="stat-label">AUTO-REMEDIATION READY</span>
+        <span class="stat-icon">⚡</span>
+      </div>
+      <div class="stat-value text-cyan">{{ summary.renovateAutoPrCount + summary.openRewriteCount }}</div>
+      <div class="stat-footer">
+        <span class="badge badge-cyan">{{ summary.renovateAutoPrCount }} Renovate PRs · {{ summary.openRewriteCount }} OpenRewrite</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Severity Distribution Section -->
+  <section class="severity-section glass-panel">
+    <div class="section-title-row">
+      <h2 class="section-title">SEVERITY DISTRIBUTION METER</h2>
+      <span class="section-sub">100% normalized to uniform CVE / Static Analysis schema</span>
+    </div>
+
+    <div class="severity-bar-container">
+      <div class="severity-segment seg-critical" [style.width.%]="getSeverityPercentage(summary.criticalCount)" [title]="'Critical: ' + summary.criticalCount"></div>
+      <div class="severity-segment seg-high" [style.width.%]="getSeverityPercentage(summary.highCount)" [title]="'High: ' + summary.highCount"></div>
+      <div class="severity-segment seg-medium" [style.width.%]="getSeverityPercentage(summary.mediumCount)" [title]="'Medium: ' + summary.mediumCount"></div>
+      <div class="severity-segment seg-low" [style.width.%]="getSeverityPercentage(summary.lowCount)" [title]="'Low: ' + summary.lowCount"></div>
+    </div>
+
+    <div class="severity-legend">
+      <div class="legend-item">
+        <span class="legend-dot dot-critical"></span>
+        <span class="legend-label">CRITICAL ({{ summary.criticalCount }})</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-high"></span>
+        <span class="legend-label">HIGH ({{ summary.highCount }})</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-medium"></span>
+        <span class="legend-label">MEDIUM ({{ summary.mediumCount }})</span>
+      </div>
+      <div class="legend-item">
+        <span class="legend-dot dot-low"></span>
+        <span class="legend-label">LOW ({{ summary.lowCount }})</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Automated Scanners Health & Coverage Grid -->
+  <section class="scanners-section">
+    <h2 class="section-title mb-4">AUTOMATED SCANNER COVERAGE &amp; FINDINGS</h2>
+    <div class="scanners-grid">
+      <div class="scanner-card glass-card" (click)="onCardClick('config')">
+        <div class="scanner-header">
+          <span class="scanner-title">TRIVY</span>
+          <span class="badge badge-cyan">ONLINE</span>
+        </div>
+        <p class="scanner-desc">Container Images &amp; OS Package Dependencies CVE Analysis.</p>
+        <div class="scanner-footer">
+          <span class="scanner-count">{{ summary.findingsByScanner['TRIVY'] || 0 }} Findings</span>
+          <span class="scanner-link">View Policy →</span>
+        </div>
+      </div>
+
+      <div class="scanner-card glass-card" (click)="onCardClick('config')">
+        <div class="scanner-header">
+          <span class="scanner-title">SEMGREP</span>
+          <span class="badge badge-cyan">ONLINE</span>
+        </div>
+        <p class="scanner-desc">SAST static analysis for Spring Boot &amp; Java OWASP Top 10 vulnerabilities.</p>
+        <div class="scanner-footer">
+          <span class="scanner-count">{{ summary.findingsByScanner['SEMGREP'] || 0 }} Findings</span>
+          <span class="scanner-link">View Policy →</span>
+        </div>
+      </div>
+
+      <div class="scanner-card glass-card" (click)="onCardClick('config')">
+        <div class="scanner-header">
+          <span class="scanner-title">GITLEAKS</span>
+          <span class="badge badge-cyan">ONLINE</span>
+        </div>
+        <p class="scanner-desc">Repository credential &amp; API key leak prevention. Excludes sample .venv secrets.</p>
+        <div class="scanner-footer">
+          <span class="scanner-count">{{ summary.findingsByScanner['GITLEAKS'] || 0 }} Findings</span>
+          <span class="scanner-link">View Policy →</span>
+        </div>
+      </div>
+
+      <div class="scanner-card glass-card" (click)="onCardClick('config')">
+        <div class="scanner-header">
+          <span class="scanner-title">CHECKOV</span>
+          <span class="badge badge-cyan">ONLINE</span>
+        </div>
+        <p class="scanner-desc">IaC Policy-as-Code checks for Dockerfiles &amp; cloud deployment scripts.</p>
+        <div class="scanner-footer">
+          <span class="scanner-count">{{ summary.findingsByScanner['CHECKOV'] || 0 }} Findings</span>
+          <span class="scanner-link">View Policy →</span>
+        </div>
+      </div>
+
+      <div class="scanner-card glass-card" (click)="onCardClick('config')">
+        <div class="scanner-header">
+          <span class="scanner-title">OSV-SCANNER</span>
+          <span class="badge badge-cyan">ONLINE</span>
+        </div>
+        <p class="scanner-desc">Open Source Vulnerability database scanner for direct &amp; transitive dependencies.</p>
+        <div class="scanner-footer">
+          <span class="scanner-count">{{ summary.findingsByScanner['OSV-SCANNER'] || 0 }} Findings</span>
+          <span class="scanner-link">View Policy →</span>
+        </div>
+      </div>
+
+      <div class="scanner-card glass-card" (click)="onCardClick('config')">
+        <div class="scanner-header">
+          <span class="scanner-title">TRUFFLEHOG</span>
+          <span class="badge badge-cyan">ONLINE</span>
+        </div>
+        <p class="scanner-desc">Verified high-entropy credential scanner checking active API token validity.</p>
+        <div class="scanner-footer">
+          <span class="scanner-count">{{ summary.findingsByScanner['TRUFFLEHOG'] || 0 }} Findings</span>
+          <span class="scanner-link">View Policy →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

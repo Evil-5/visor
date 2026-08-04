@@ -1,0 +1,59 @@
+<div class="config-container animate-fade-in">
+  <!-- Intro Banner -->
+  <section class="banner-panel glass-panel">
+    <div class="banner-left">
+      <h1 class="banner-title">SCANNERS &amp; EXCLUSION POLICIES</h1>
+      <p class="banner-subtitle">
+        Centralized security governance across Vindicator products. Prevent false-positive secret alerts by filtering out <strong>.venv</strong> environments, test fixtures, and sample API keys via mounted configuration files.
+      </p>
+    </div>
+    <div class="banner-right">
+      <span class="badge badge-cyan">⚙️ CONFIGURATION AS CODE</span>
+    </div>
+  </section>
+
+  <!-- Interactive Policy Explorer -->
+  <div class="policy-layout">
+    <!-- Scanner Policy Sidebar List -->
+    <div class="sidebar-list glass-panel">
+      <div 
+        *ngFor="let item of scanners" 
+        class="sidebar-item" 
+        [class.active]="selectedScanner.name === item.name"
+        (click)="selectPolicy(item)">
+        <div class="item-head">
+          <span class="item-name">{{ item.name }}</span>
+          <span class="badge badge-cyan">{{ item.status }}</span>
+        </div>
+        <span class="item-cat">{{ item.category }}</span>
+      </div>
+    </div>
+
+    <!-- Active Scanner Policy Detail View -->
+    <div class="policy-detail glass-card" *ngIf="selectedScanner">
+      <div class="detail-header">
+        <div>
+          <h2 class="detail-title">{{ selectedScanner.name }} POLICY INSPECTOR</h2>
+          <span class="detail-sub">{{ selectedScanner.category }}</span>
+        </div>
+        <span class="badge badge-cyan">MOUNTED AT {{ selectedScanner.policyFile }}</span>
+      </div>
+
+      <div class="detail-section">
+        <h3 class="section-label">🛡️ AUTOMATED EXCLUSION &amp; IGNORE RULES</h3>
+        <p class="section-desc">{{ selectedScanner.exclusionSummary }}</p>
+      </div>
+
+      <div class="detail-section">
+        <h3 class="section-label">📜 CONFIGURATION SNIPPET / CLI ARGUMENTS</h3>
+        <div class="code-panel font-mono">
+          <pre><code>{{ selectedScanner.rulesConfig }}</code></pre>
+        </div>
+      </div>
+
+      <div class="detail-footer">
+        <span class="footer-note">⚡ Changes to <code>configs/</code> automatically reload in next scheduled scan pipeline execution.</span>
+      </div>
+    </div>
+  </div>
+</div>

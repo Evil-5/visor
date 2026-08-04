@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: vindicator-security-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - vindicator-net
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vindicator-security-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/vindicator-security
+      - JWK_SET_URI=https://www.googleapis.com/oauth2/v3/certs
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - vindicator-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: vindicator-security-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - vindicator-net
+
+networks:
+  vindicator-net:
+    driver: bridge
+
+volumes:
+  mongodb_data:

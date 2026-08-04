@@ -1,0 +1,14 @@
+# Vindicator Checkov Configuration
+skip-path:
+  - .venv
+  - venv
+  - node_modules
+  - .bin
+  - security_audit
+  - target
+  - dist
+  - test
+  - tests
+compact: true
+quiet: false
+output: json

@@ -1,0 +1,47 @@
+<div class="app-root">
+  <!-- Top Glass Navigation Bar -->
+  <app-navbar 
+    [activeTab]="activeTab" 
+    (tabChange)="onTabChange($event)"
+    (triggerScan)="onTriggerScan()">
+  </app-navbar>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <app-dashboard 
+      *ngIf="activeTab === 'dashboard'" 
+      [summary]="summary"
+      (navigateToTab)="onTabChange($event)">
+    </app-dashboard>
+
+    <app-findings 
+      *ngIf="activeTab === 'findings'" 
+      [findings]="findings"
+      (statusChanged)="onFindingStatusChanged($event)">
+    </app-findings>
+
+    <app-remediation 
+      *ngIf="activeTab === 'remediation'" 
+      [automatedList]="automatedList"
+      [aiTaskList]="aiTaskList">
+    </app-remediation>
+
+    <app-scanners-config 
+      *ngIf="activeTab === 'config'">
+    </app-scanners-config>
+  </main>
+
+  <!-- Live Action Toast / Notification -->
+  <div *ngIf="toastMessage" class="toast-panel glass-panel animate-fade-in">
+    <span class="toast-icon">⚡</span>
+    <span>{{ toastMessage }}</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span>VINDICATOR SECURITY CONTROL PLANE &bull; CONFIGURATION-DRIVEN SYSTEM</span>
+      <span>INTEGRATING TRIVY · SEMGREP · GITLEAKS · CHECKOV · OSV-SCANNER · TRUFFLEHOG</span>
+    </div>
+  </footer>
+</div>

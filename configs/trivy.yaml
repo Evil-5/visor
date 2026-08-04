@@ -1,0 +1,17 @@
+# Vindicator Trivy Scanner Configuration
+scan:
+  skip-dirs:
+    - .venv
+    - venv
+    - node_modules
+    - .bin
+    - security_audit
+    - target
+    - dist
+    - test
+    - tests
+  skip-files:
+    - "**/*.min.js"
+    - "**/*.min.css"
+    - "**/sample_api_key.*"
+    - "**/mock_*"

@@ -1,0 +1,121 @@
+<div class="remediation-container animate-fade-in">
+  <!-- Top Intro Panel -->
+  <section class="intro-panel glass-panel">
+    <div class="intro-left">
+      <h1 class="intro-title">AUTOMATED REMEDIATION &amp; AI AGENT HUB</h1>
+      <p class="intro-subtitle">
+        Vindicator’s multi-layered remediation pipeline leverages existing deterministic tooling (<strong>Renovate Bot</strong> for dependencies &amp; <strong>OpenRewrite</strong> for Java/Spring AST refactoring) alongside specialized <strong>AI Remediation Agents</strong> for complex secrets &amp; IaC misconfigurations.
+      </p>
+    </div>
+    <div class="intro-right">
+      <div class="stats-pills">
+        <span class="pill pill-renovate">📦 {{ renovateTasks.length }} Renovate PRs</span>
+        <span class="pill pill-openrewrite">☕ {{ openRewriteTasks.length }} OpenRewrite</span>
+        <span class="pill pill-ai">🤖 {{ aiTaskList.length }} AI Tasks</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sub Navigation Tabs -->
+  <div class="subtabs-bar">
+    <button 
+      class="subtab-btn" 
+      [class.active]="activeSubTab === 'renovate'" 
+      (click)="activeSubTab = 'renovate'">
+      <span>📦 Renovate Dependency Upgrades ({{ renovateTasks.length }})</span>
+    </button>
+    <button 
+      class="subtab-btn" 
+      [class.active]="activeSubTab === 'openrewrite'" 
+      (click)="activeSubTab = 'openrewrite'">
+      <span>☕ OpenRewrite Spring/Java AST Recipes ({{ openRewriteTasks.length }})</span>
+    </button>
+    <button 
+      class="subtab-btn" 
+      [class.active]="activeSubTab === 'ai'" 
+      (click)="activeSubTab = 'ai'">
+      <span>🤖 AI Remediation Agent Console ({{ aiTaskList.length }})</span>
+    </button>
+  </div>
+
+  <!-- RENOVATE TAB -->
+  <div *ngIf="activeSubTab === 'renovate'" class="tab-content">
+    <div *ngFor="let item of renovateTasks; let i = index" class="remediation-card glass-card">
+      <div class="card-left">
+        <div class="card-badges">
+          <span class="badge badge-cyan">RENOVATE BOT AUTO-PR</span>
+          <span class="cve-tag">{{ item.cveOrRuleId }}</span>
+        </div>
+        <h3 class="card-title">Upgrade Package <strong>{{ item.packageOrFile }}</strong></h3>
+        <p class="card-desc">
+          Automated dependency update from installed version <code>{{ item.installedVersion }}</code> to fixed release <code>{{ item.fixedVersion }}</code>.
+        </p>
+        <div class="command-box font-mono">
+          <code>{{ item.suggestedAction }}</code>
+        </div>
+      </div>
+      <div class="card-right">
+        <button class="btn-copy" (click)="copyCommand(item.suggestedAction, 'ren-' + i)">
+          <span *ngIf="copiedItem !== ('ren-' + i)">📋 Copy PR Config</span>
+          <span *ngIf="copiedItem === ('ren-' + i)" class="text-success">✓ Copied!</span>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="renovateTasks.length === 0" class="empty-state glass-panel">
+      <h3>All Dependencies Up-to-Date</h3>
+      <p>No active dependency upgrade PRs pending.</p>
+    </div>
+  </div>
+
+  <!-- OPENREWRITE TAB -->
+  <div *ngIf="activeSubTab === 'openrewrite'" class="tab-content">
+    <div *ngFor="let item of openRewriteTasks; let i = index" class="remediation-card glass-card">
+      <div class="card-left">
+        <div class="card-badges">
+          <span class="badge badge-cyan">OPENREWRITE RECIPE</span>
+          <span class="cve-tag">{{ item.cveOrRuleId }}</span>
+        </div>
+        <h3 class="card-title">Rule-Based AST Fix in <strong>{{ item.packageOrFile }}</strong></h3>
+        <p class="card-desc">
+          Run OpenRewrite deterministic Maven recipe to refactor OWASP Top 10 Java &amp; Spring security anti-patterns without manual code editing.
+        </p>
+        <div class="command-box font-mono">
+          <code>{{ item.suggestedAction }}</code>
+        </div>
+      </div>
+      <div class="card-right">
+        <button class="btn-copy" (click)="copyCommand(item.suggestedAction, 'ow-' + i)">
+          <span *ngIf="copiedItem !== ('ow-' + i)">⚡ Copy Maven Cmd</span>
+          <span *ngIf="copiedItem === ('ow-' + i)" class="text-success">✓ Copied!</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI AGENTS TAB -->
+  <div *ngIf="activeSubTab === 'ai'" class="tab-content">
+    <div *ngFor="let item of aiTaskList; let i = index" class="remediation-card glass-card ai-card">
+      <div class="card-left">
+        <div class="card-badges">
+          <span class="badge badge-critical">AI REMEDIATION AGENT REQUIRED</span>
+          <span class="cve-tag">{{ item.cveOrRuleId }}</span>
+        </div>
+        <h3 class="card-title">Contextual AI Fix for <strong>{{ item.packageOrFile }}</strong></h3>
+        <p class="card-desc">
+          Complex finding requiring architectural or context-aware secret rotation / IaC policy adjustments.
+        </p>
+        <div class="ai-prompt-box font-mono">
+          <span class="prompt-label">🤖 AI Prompt Context for Agent:</span>
+          <p class="prompt-text">{{ item.suggestedAction }}</p>
+        </div>
+      </div>
+      <div class="card-right">
+        <button class="btn-copy" (click)="copyCommand(item.suggestedAction, 'ai-' + i)">
+          <span *ngIf="copiedItem !== ('ai-' + i)">🤖 Copy AI Prompt</span>
+          <span *ngIf="copiedItem === ('ai-' + i)" class="text-success">✓ Copied!</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

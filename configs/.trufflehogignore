@@ -1,0 +1,12 @@
+# Vindicator TruffleHog Ignore File
+.venv/
+venv/
+node_modules/
+.bin/
+security_audit/
+target/
+dist/
+test/
+tests/
+fixtures/
+mock/
