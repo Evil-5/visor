@@ -41,8 +41,8 @@
 .search-input {
   width: 100%;
   padding: 10px 14px 10px 42px;
-  background: hsla(220, 20%, 18%, 0.7);
-  border: 1px solid var(--border-glass);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   border-radius: 10px;
   color: var(--text-primary);
   font-size: 0.92rem;
@@ -52,8 +52,8 @@
 }
 
 .search-input:focus {
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 12px hsla(195, 95%, 55%, 0.25);
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 12px var(--accent-teal-bg);
 }
 
 .select-wrapper {
@@ -71,10 +71,10 @@
 
 .filter-select {
   padding: 9px 14px;
-  background: hsla(220, 20%, 18%, 0.8);
-  border: 1px solid var(--border-glass);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   border-radius: 10px;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 0.88rem;
   font-weight: 600;
   outline: none;
@@ -86,7 +86,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
-  border-top: 1px solid var(--border-glass);
+  border-top: 1px solid var(--border-light);
   padding-top: 16px;
 }
 
@@ -99,8 +99,8 @@
 
 .pill-btn {
   padding: 6px 14px;
-  background: hsla(220, 20%, 18%, 0.6);
-  border: 1px solid var(--border-glass);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   border-radius: 9999px;
   color: var(--text-secondary);
   font-size: 0.76rem;
@@ -110,14 +110,14 @@
 }
 
 .pill-btn:hover {
-  color: #fff;
-  background: hsla(220, 20%, 25%, 0.8);
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
 }
 
 .pill-btn.active {
-  background: hsla(195, 95%, 55%, 0.18);
-  color: #fff;
-  border-color: var(--accent-cyan);
+  background: var(--accent-teal-bg);
+  color: var(--accent-teal);
+  border-color: var(--accent-teal);
 }
 
 .pill-crit.active { background: var(--sev-critical-bg); border-color: var(--sev-critical); }
@@ -174,7 +174,7 @@
   font-size: 0.76rem;
   font-weight: 700;
   color: var(--text-secondary);
-  background: hsla(220, 20%, 22%, 0.6);
+  background: var(--bg-surface);
   padding: 4px 10px;
   border-radius: 9999px;
 }
@@ -182,7 +182,7 @@
 .finding-title {
   font-size: 1.15rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .finding-desc {
@@ -198,10 +198,10 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 16px;
-  background: hsla(220, 25%, 11%, 0.65);
+  background: var(--bg-surface);
   padding: 8px 14px;
   border-radius: 8px;
-  border: 1px solid var(--border-glass);
+  border: 1px solid var(--border-light);
 }
 
 .ver-badge {
@@ -225,13 +225,13 @@
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 6px;
-  background: var(--accent-cyan-bg);
-  border: 1px solid hsla(195, 95%, 55%, 0.35);
+  background: var(--accent-teal-bg);
+  border: 1px solid var(--accent-teal);
 }
 
 .rem-text {
   font-size: 0.82rem;
-  color: var(--accent-cyan);
+  color: var(--accent-teal);
 }
 
 /* Right Controls */
@@ -256,7 +256,7 @@
   font-weight: 800;
   cursor: pointer;
   outline: none;
-  border: 1px solid var(--border-glass);
+  border: 1px solid var(--border-light);
 }
 
 .status-open {

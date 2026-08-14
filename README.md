@@ -1,5 +1,8 @@
-# 🛡️ Vindicator Security Control Plane
+<div align="center">
+  <img src="docs/visor-logo.jpg" alt="VISOR Logo" width="600"/>
+</div>
 
+# 🛡️ Vindicator Security Control Plane
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.2-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![Angular](https://img.shields.io/badge/Angular-19-dd0031.svg)](https://angular.io)

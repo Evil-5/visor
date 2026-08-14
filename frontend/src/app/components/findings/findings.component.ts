@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FindingResponse } from '../../models/security.model';
+import { AppStateService } from '../../services/state.service';
 
 @Component({
   selector: 'app-findings',
@@ -11,8 +12,11 @@ import { FindingResponse } from '../../models/security.model';
   styleUrls: ['./findings.component.css']
 })
 export class FindingsComponent {
-  @Input() findings: FindingResponse[] = [];
-  @Output() statusChanged = new EventEmitter<{ findingId: string; status: string }>();
+  state = inject(AppStateService);
+
+  get findings(): FindingResponse[] {
+    return this.state.findings();
+  }
 
   selectedAsset = 'ALL';
   selectedScanner = 'ALL';
@@ -39,7 +43,9 @@ export class FindingsComponent {
   }
 
   onStatusChange(findingId: string, newStatus: string) {
-    this.statusChanged.emit({ findingId, status: newStatus });
+    this.state.updateFindingStatus(findingId, newStatus).subscribe(() => {
+      this.state.loadAllData();
+    });
   }
 
   resetFilters() {

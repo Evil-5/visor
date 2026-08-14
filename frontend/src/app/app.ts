@@ -1,92 +1,88 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule, RouterOutlet, Router } from '@angular/router';
+import { trigger, transition, style, query, animateChild, group, animate } from '@angular/animations';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { FindingsComponent } from './components/findings/findings.component';
-import { RemediationComponent } from './components/remediation/remediation.component';
-import { ScannersConfigComponent } from './components/scanners-config/scanners-config.component';
-import { SecurityService } from './services/security.service';
-import {
-  DashboardSummaryResponse,
-  FindingResponse,
-  RemediationSuggestionDto
-} from './models/security.model';
+import { ScanModalComponent } from './components/scan-modal/scan-modal';
+import { AppStateService } from './services/state.service';
+import { ScanJob } from './models/security.model';
+
+export const routeTransitionAnimations = trigger('routeAnimations', [
+  transition('* <=> *', [
+    style({ position: 'relative' }),
+    query(':enter, :leave', [
+      style({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        opacity: 0
+      })
+    ], { optional: true }),
+    query(':enter', [
+      style({ opacity: 0, transform: 'translateY(10px)' })
+    ], { optional: true }),
+    group([
+      query(':leave', [
+        animate('200ms ease-out', style({ opacity: 0, transform: 'translateY(-10px)' }))
+      ], { optional: true }),
+      query(':enter', [
+        animate('300ms 100ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ], { optional: true })
+    ])
+  ])
+]);
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule,
+    RouterModule,
+    RouterOutlet,
     NavbarComponent,
-    DashboardComponent,
-    FindingsComponent,
-    RemediationComponent,
-    ScannersConfigComponent
+    ScanModalComponent
   ],
   templateUrl: './app.html',
-  styleUrls: ['./app.css']
+  styleUrls: ['./app.css'],
+  animations: [routeTransitionAnimations]
 })
-export class App implements OnInit {
-  activeTab = 'dashboard';
+export class App implements OnInit, OnDestroy {
+  state = inject(AppStateService);
+  private router = inject(Router);
 
-  summary: DashboardSummaryResponse | null = null;
-  findings: FindingResponse[] = [];
-  automatedList: RemediationSuggestionDto[] = [];
-  aiTaskList: RemediationSuggestionDto[] = [];
-
+  showScanModal = false;
   toastMessage: string | null = null;
-  isScanning = false;
-
-  constructor(private securityService: SecurityService) {}
 
   ngOnInit() {
-    this.loadAllData();
+    this.state.loadAllData();
+    this.state.startPolling();
   }
 
-  loadAllData() {
-    this.securityService.getDashboardSummary().subscribe(data => {
-      this.summary = data;
-    });
-    this.securityService.getFindings().subscribe(data => {
-      this.findings = data;
-    });
-    this.securityService.getAutomatedRemediations().subscribe(data => {
-      this.automatedList = data;
-    });
-    this.securityService.getAiTasks().subscribe(data => {
-      this.aiTaskList = data;
-    });
+  ngOnDestroy() {
+    this.state.stopPolling();
+  }
+
+  get activeJobs() {
+    return this.state.activeJobs;
+  }
+
+  getRouteAnimationData(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
   }
 
   onTabChange(tab: string) {
-    this.activeTab = tab;
+    this.router.navigate([`/${tab}`]);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  onFindingStatusChanged(event: { findingId: string; status: string }) {
-    this.securityService.updateFindingStatus(event.findingId, event.status).subscribe(() => {
-      this.showToast(`Updated finding status to ${event.status}`);
-      this.loadAllData();
-    });
+  onOpenScanModal() {
+    this.showScanModal = true;
   }
 
-  onTriggerScan() {
-    if (this.isScanning) return;
-    this.isScanning = true;
-    this.showToast('⚡ Pipeline scan triggered across all 6 scanners...');
-    setTimeout(() => {
-      this.isScanning = false;
-      this.showToast('✅ Scanners completed! Data refreshed.');
-      this.loadAllData();
-    }, 3000);
-  }
-
-  private showToast(message: string) {
-    this.toastMessage = message;
-    setTimeout(() => {
-      if (this.toastMessage === message) {
-        this.toastMessage = null;
-      }
-    }, 3500);
+  onTriggerScan(targetDir: string) {
+    if (!targetDir) return;
+    this.showScanModal = false;
+    this.state.triggerScan(targetDir);
   }
 }

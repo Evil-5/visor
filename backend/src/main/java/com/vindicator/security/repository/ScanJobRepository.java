@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface ScanJobRepository extends MongoRepository<ScanJob, String> {
     Optional<ScanJob> findByJobId(String jobId);
+    java.util.List<ScanJob> findByStatusOrderByStartedAtDesc(String status);
+    Optional<ScanJob> findFirstByStatusOrderByStartedAtAsc(String status);
 }

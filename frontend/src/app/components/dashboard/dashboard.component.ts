@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardSummaryResponse } from '../../models/security.model';
+import { AppStateService } from '../../services/state.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,7 +11,12 @@ import { DashboardSummaryResponse } from '../../models/security.model';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
-  @Input() summary: DashboardSummaryResponse | null = null;
+  state = inject(AppStateService);
+  
+  get summary(): DashboardSummaryResponse | null {
+    return this.state.summary();
+  }
+
   @Output() navigateToTab = new EventEmitter<string>();
 
   get totalCount(): number {

@@ -1,41 +1,44 @@
-<div class="app-root">
+<div class="app-container">
   <!-- Top Glass Navigation Bar -->
   <app-navbar 
-    [activeTab]="activeTab" 
-    (tabChange)="onTabChange($event)"
-    (triggerScan)="onTriggerScan()">
+    (openScanModal)="onOpenScanModal()">
   </app-navbar>
 
   <!-- Main Content Area -->
-  <main class="main-content">
-    <app-dashboard 
-      *ngIf="activeTab === 'dashboard'" 
-      [summary]="summary"
-      (navigateToTab)="onTabChange($event)">
-    </app-dashboard>
-
-    <app-findings 
-      *ngIf="activeTab === 'findings'" 
-      [findings]="findings"
-      (statusChanged)="onFindingStatusChanged($event)">
-    </app-findings>
-
-    <app-remediation 
-      *ngIf="activeTab === 'remediation'" 
-      [automatedList]="automatedList"
-      [aiTaskList]="aiTaskList">
-    </app-remediation>
-
-    <app-scanners-config 
-      *ngIf="activeTab === 'config'">
-    </app-scanners-config>
+  <main class="main-content" [@routeAnimations]="getRouteAnimationData(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
   </main>
 
-  <!-- Live Action Toast / Notification -->
-  <div *ngIf="toastMessage" class="toast-panel glass-panel animate-fade-in">
-    <span class="toast-icon">⚡</span>
-    <span>{{ toastMessage }}</span>
+  <!-- Jobs Tracker Widget -->
+  <div class="jobs-tracker" *ngIf="activeJobs() && activeJobs().length > 0">
+    <div class="jobs-header">
+      <h4>Active Scans ({{activeJobs().length}})</h4>
+    </div>
+    <div class="jobs-list">
+      <div class="job-card" *ngFor="let job of activeJobs()">
+        <div class="job-asset-header">
+          <span class="job-asset-name">{{ job.asset }}</span>
+          <span class="badge" 
+                [class.badge-cyan]="job.status === 'IN_PROGRESS'" 
+                [class.badge-medium]="job.status === 'COMPLETED'">{{ job.status }}</span>
+        </div>
+        
+        <div class="job-scanners" *ngIf="job.scannerStatuses">
+          <div *ngFor="let kv of job.scannerStatuses | keyvalue" class="scanner-item">
+            <span class="scanner-name">{{ kv.key }}</span>
+            <span class="scanner-status" [ngClass]="kv.value.toLowerCase()">
+              <svg *ngIf="kv.value === 'COMPLETED'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="status-icon"><path d="M20 6L9 17l-5-5"/></svg>
+              <svg *ngIf="kv.value === 'IN_PROGRESS' || kv.value === 'RUNNING'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="status-icon spinning"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              <svg *ngIf="kv.value === 'FAILED'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="status-icon error"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+              {{ kv.value }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <app-scan-modal *ngIf="showScanModal" (close)="showScanModal = false" (runScan)="onTriggerScan($event)"></app-scan-modal>
 
   <!-- Footer -->
   <footer class="app-footer">

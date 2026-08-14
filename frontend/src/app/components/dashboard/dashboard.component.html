@@ -9,7 +9,7 @@
     </div>
     <div class="hero-right">
       <div class="hero-badge">
-        <span class="badge badge-cyan">🔒 SECURE CONTROL PLANE v1.0</span>
+        <span class="badge badge-cyan">SECURE CONTROL PLANE v1.0</span>
       </div>
     </div>
   </section>
@@ -19,7 +19,6 @@
     <div class="stat-card glass-card" (click)="onCardClick('findings')">
       <div class="stat-header">
         <span class="stat-label">TOTAL OPEN FINDINGS</span>
-        <span class="stat-icon">🛡️</span>
       </div>
       <div class="stat-value">{{ summary.totalOpenFindings }}</div>
       <div class="stat-footer">
@@ -30,7 +29,6 @@
     <div class="stat-card stat-critical glass-card" (click)="onCardClick('findings')">
       <div class="stat-header">
         <span class="stat-label">CRITICAL SEVERITY</span>
-        <span class="stat-icon">🚨</span>
       </div>
       <div class="stat-value text-critical">{{ summary.criticalCount }}</div>
       <div class="stat-footer">
@@ -41,7 +39,6 @@
     <div class="stat-card stat-high glass-card" (click)="onCardClick('findings')">
       <div class="stat-header">
         <span class="stat-label">HIGH &amp; MEDIUM SEVERITY</span>
-        <span class="stat-icon">⚠️</span>
       </div>
       <div class="stat-value text-high">{{ summary.highCount + summary.mediumCount }}</div>
       <div class="stat-footer">
@@ -52,7 +49,6 @@
     <div class="stat-card stat-remediation glass-card" (click)="onCardClick('remediation')">
       <div class="stat-header">
         <span class="stat-label">AUTO-REMEDIATION READY</span>
-        <span class="stat-icon">⚡</span>
       </div>
       <div class="stat-value text-cyan">{{ summary.renovateAutoPrCount + summary.openRewriteCount }}</div>
       <div class="stat-footer">

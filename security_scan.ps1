@@ -1,10 +1,15 @@
 # PowerShell Security Scan Runner for Docker/Podman
 # Scans: Checkov, Gitleaks, OSV-Scanner, Semgrep, Trivy Code, TruffleHog, Trivy Image
 
+param(
+    [string]$TargetDir = "",
+    [string]$JobId = ""
+)
+
 $ErrorActionPreference = "Stop"
 
 Write-Host "====================================================" -ForegroundColor Cyan
-Write-Host "       SPDX Custom Security Agent Scan Runner        " -ForegroundColor Cyan
+Write-Host "       Vindicator VISOR Security Scan Runner         " -ForegroundColor Cyan
 Write-Host "====================================================" -ForegroundColor Cyan
 
 # 1. Detect Container Engine
@@ -20,10 +25,24 @@ if (Get-Command docker -ErrorAction SilentlyContinue) {
 }
 Write-Host "Using container engine: $Engine" -ForegroundColor Green
 
-# 2. Prompt for Codebase Directory
-$TargetDir = Read-Host "Enter the absolute path of the codebase to scan (Press Enter for current directory)"
+# Helper function to report status
+function Report-Status($ScannerName, $Status) {
+    if ($JobId -and $env:VINDICATOR_CONTROL_PLANE_URL) {
+        try {
+            $Payload = @{ scannerName = $ScannerName; status = $Status } | ConvertTo-Json -Compress
+            Invoke-RestMethod -Uri "$env:VINDICATOR_CONTROL_PLANE_URL/api/v1/scans/jobs/$JobId/status" -Method Patch -Body $Payload -ContentType "application/json" -TimeoutSec 10 | Out-Null
+        } catch {
+            Write-Host "  [WARN] Failed to report status to Control Plane: $_" -ForegroundColor Yellow
+        }
+    }
+}
+
+# 2. Prompt for Codebase Directory if not provided
 if ([string]::IsNullOrWhiteSpace($TargetDir)) {
-    $TargetDir = Get-Location
+    $TargetDir = Read-Host "Enter the absolute path of the codebase to scan (Press Enter for current directory)"
+    if ([string]::IsNullOrWhiteSpace($TargetDir)) {
+        $TargetDir = Get-Location
+    }
 }
 
 # Resolve target directory to absolute Windows path
@@ -65,6 +84,7 @@ $CheckovBlock = {
     if (-not (Test-Path $ScanDir)) { New-Item -ItemType Directory -Force -Path $ScanDir | Out-Null }
 
     Write-Output "[+] Starting Checkov scan (Image: $Image)..."
+    Report-Status $ScanName "RUNNING"
     & $Engine pull $Image 2>&1 | Out-String | Out-Null
 
     try {
@@ -73,12 +93,15 @@ $CheckovBlock = {
         $ExitCode = $LASTEXITCODE
         if ($ExitCode -eq 0 -or $ExitCode -eq 1) {
             Write-Output "[OK] Checkov scan completed. Report: security_audit/checkov/checkov-report.json"
+            Report-Status $ScanName "COMPLETED"
         } else {
             Write-Output "[FAIL] Checkov scan exited with code $ExitCode"
+            Report-Status $ScanName "FAILED"
             $output | Out-File -FilePath $ErrorFile -Encoding utf8
         }
     } catch {
         Write-Output "[FAIL] Checkov scan failed: $_"
+            Report-Status $ScanName "FAILED"
         $_ | Out-String | Out-File -FilePath $ErrorFile -Encoding utf8
     }
 }
@@ -97,6 +120,7 @@ $GitleaksBlock = {
     if (-not (Test-Path $ScanDir)) { New-Item -ItemType Directory -Force -Path $ScanDir | Out-Null }
 
     Write-Output "[+] Starting Gitleaks scan (Image: $Image)..."
+    Report-Status $ScanName "RUNNING"
     & $Engine pull $Image 2>&1 | Out-String | Out-Null
 
     try {
@@ -105,12 +129,15 @@ $GitleaksBlock = {
         $ExitCode = $LASTEXITCODE
         if ($ExitCode -eq 0 -or $ExitCode -eq 1) {
             Write-Output "[OK] Gitleaks scan completed. Report: security_audit/gitleaks/gitleaks-report.json"
+            Report-Status $ScanName "COMPLETED"
         } else {
             Write-Output "[FAIL] Gitleaks scan exited with code $ExitCode"
+            Report-Status $ScanName "FAILED"
             $output | Out-File -FilePath $ErrorFile -Encoding utf8
         }
     } catch {
         Write-Output "[FAIL] Gitleaks scan failed: $_"
+            Report-Status $ScanName "FAILED"
         $_ | Out-String | Out-File -FilePath $ErrorFile -Encoding utf8
     }
 }
@@ -129,6 +156,7 @@ $OsvBlock = {
     if (-not (Test-Path $ScanDir)) { New-Item -ItemType Directory -Force -Path $ScanDir | Out-Null }
 
     Write-Output "[+] Starting OSV-Scanner scan (Image: $Image)..."
+    Report-Status $ScanName "RUNNING"
     & $Engine pull $Image 2>&1 | Out-String | Out-Null
 
     try {
@@ -137,12 +165,15 @@ $OsvBlock = {
         $ExitCode = $LASTEXITCODE
         if ($ExitCode -eq 0 -or $ExitCode -eq 1) {
             Write-Output "[OK] OSV-Scanner scan completed. Report: security_audit/osv-scanner/osv-report.json"
+            Report-Status $ScanName "COMPLETED"
         } else {
             Write-Output "[FAIL] OSV-Scanner scan exited with code $ExitCode"
+            Report-Status $ScanName "FAILED"
             $output | Out-File -FilePath $ErrorFile -Encoding utf8
         }
     } catch {
         Write-Output "[FAIL] OSV-Scanner scan failed: $_"
+            Report-Status $ScanName "FAILED"
         $_ | Out-String | Out-File -FilePath $ErrorFile -Encoding utf8
     }
 }
@@ -161,6 +192,7 @@ $SemgrepBlock = {
     if (-not (Test-Path $ScanDir)) { New-Item -ItemType Directory -Force -Path $ScanDir | Out-Null }
 
     Write-Output "[+] Starting Semgrep scan (Image: $Image)..."
+    Report-Status $ScanName "RUNNING"
     & $Engine pull $Image 2>&1 | Out-String | Out-Null
 
     try {
@@ -168,12 +200,15 @@ $SemgrepBlock = {
         $ExitCode = $LASTEXITCODE
         if ($ExitCode -eq 0) {
             Write-Output "[OK] Semgrep scan completed. Report: security_audit/semgrep/semgrep-report.json"
+            Report-Status $ScanName "COMPLETED"
         } else {
             Write-Output "[FAIL] Semgrep scan exited with code $ExitCode"
+            Report-Status $ScanName "FAILED"
             $output | Out-File -FilePath $ErrorFile -Encoding utf8
         }
     } catch {
         Write-Output "[FAIL] Semgrep scan failed: $_"
+            Report-Status $ScanName "FAILED"
         $_ | Out-String | Out-File -FilePath $ErrorFile -Encoding utf8
     }
 }
@@ -192,6 +227,7 @@ $TrivyBlock = {
     if (-not (Test-Path $ScanDir)) { New-Item -ItemType Directory -Force -Path $ScanDir | Out-Null }
 
     Write-Output "[+] Starting Trivy Code scan (Image: $Image)..."
+    Report-Status $ScanName "RUNNING"
     & $Engine pull $Image 2>&1 | Out-String | Out-Null
 
     try {
@@ -200,12 +236,15 @@ $TrivyBlock = {
         $ExitCode = $LASTEXITCODE
         if ($ExitCode -eq 0) {
             Write-Output "[OK] Trivy Code scan completed. Report: security_audit/trivy/trivy-report.json"
+            Report-Status $ScanName "COMPLETED"
         } else {
             Write-Output "[FAIL] Trivy Code scan exited with code $ExitCode"
+            Report-Status $ScanName "FAILED"
             $output | Out-File -FilePath $ErrorFile -Encoding utf8
         }
     } catch {
         Write-Output "[FAIL] Trivy Code scan failed: $_"
+            Report-Status $ScanName "FAILED"
         $_ | Out-String | Out-File -FilePath $ErrorFile -Encoding utf8
     }
 }
@@ -224,6 +263,7 @@ $TrufflehogBlock = {
     if (-not (Test-Path $ScanDir)) { New-Item -ItemType Directory -Force -Path $ScanDir | Out-Null }
 
     Write-Output "[+] Starting TruffleHog scan (Image: $Image)..."
+    Report-Status $ScanName "RUNNING"
     & $Engine pull $Image 2>&1 | Out-String | Out-Null
 
     try {
@@ -233,12 +273,15 @@ $TrufflehogBlock = {
         if ($ExitCode -eq 0 -or $ExitCode -eq 1) {
             $output | Out-File -FilePath $ReportFile -Encoding utf8
             Write-Output "[OK] TruffleHog scan completed. Report: security_audit/trufflehog/trufflehog-report.json"
+            Report-Status $ScanName "COMPLETED"
         } else {
             Write-Output "[FAIL] TruffleHog scan exited with code $ExitCode"
+            Report-Status $ScanName "FAILED"
             $output | Out-File -FilePath $ErrorFile -Encoding utf8
         }
     } catch {
         Write-Output "[FAIL] TruffleHog scan failed: $_"
+            Report-Status $ScanName "FAILED"
         $_ | Out-String | Out-File -FilePath $ErrorFile -Encoding utf8
     }
 }
@@ -262,6 +305,7 @@ $TrivyImageBlock = {
     }
 
     Write-Output "[+] Starting Trivy Image scan on image: $ImageTag (Image: $Image)..."
+    Report-Status $ScanName "RUNNING"
     & $Engine pull $Image 2>&1 | Out-String | Out-Null
 
     try {
@@ -269,12 +313,15 @@ $TrivyImageBlock = {
         $ExitCode = $LASTEXITCODE
         if ($ExitCode -eq 0) {
             Write-Output "[OK] Trivy Image scan completed. Report: security_audit/trivy-image/trivy-image-report.json"
+            Report-Status $ScanName "COMPLETED"
         } else {
             Write-Output "[FAIL] Trivy Image scan exited with code $ExitCode"
+            Report-Status $ScanName "FAILED"
             $output | Out-File -FilePath $ErrorFile -Encoding utf8
         }
     } catch {
         Write-Output "[FAIL] Trivy Image scan failed: $_"
+            Report-Status $ScanName "FAILED"
         $_ | Out-String | Out-File -FilePath $ErrorFile -Encoding utf8
     }
 }

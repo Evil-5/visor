@@ -28,7 +28,7 @@
   font-size: 1.65rem;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .hero-subtitle {
@@ -74,12 +74,12 @@
   font-size: 2.75rem;
   font-weight: 800;
   line-height: 1;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .text-critical { color: var(--sev-critical); }
 .text-high { color: var(--sev-high); }
-.text-cyan { color: var(--accent-cyan); }
+.text-cyan { color: var(--accent-teal); }
 
 .stat-footer {
   display: flex;
@@ -111,7 +111,7 @@
   font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .section-sub {
@@ -198,7 +198,7 @@
   font-size: 1.08rem;
   font-weight: 800;
   letter-spacing: 0.08em;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .scanner-desc {
@@ -211,7 +211,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid var(--border-glass);
+  border-top: 1px solid var(--border-light);
   padding-top: 14px;
   font-size: 0.82rem;
   font-weight: 700;
@@ -222,7 +222,7 @@
 }
 
 .scanner-link {
-  color: var(--accent-cyan);
+  color: var(--accent-teal);
   transition: transform 0.2s;
 }
 

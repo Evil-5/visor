@@ -13,13 +13,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  border-left: 4px solid var(--accent-cyan);
+  border-left: 4px solid var(--accent-teal);
 }
 
 .banner-title {
   font-size: 1.6rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .banner-subtitle {
@@ -53,8 +53,8 @@
 .sidebar-item {
   padding: 16px;
   border-radius: 12px;
-  background: hsla(220, 20%, 15%, 0.6);
-  border: 1px solid var(--border-glass);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -63,13 +63,13 @@
 }
 
 .sidebar-item:hover {
-  background: hsla(220, 20%, 20%, 0.85);
+  background: var(--bg-card-hover);
 }
 
 .sidebar-item.active {
-  background: hsla(195, 95%, 55%, 0.16);
-  border-color: var(--accent-cyan);
-  box-shadow: 0 0 16px hsla(195, 95%, 55%, 0.15);
+  background: var(--accent-teal-bg);
+  border-color: var(--accent-teal);
+  box-shadow: 0 0 16px var(--accent-teal-bg);
 }
 
 .item-head {
@@ -81,7 +81,7 @@
 .item-name {
   font-size: 1.02rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .item-cat {
@@ -101,14 +101,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--border-glass);
+  border-bottom: 1px solid var(--border-light);
   padding-bottom: 20px;
 }
 
 .detail-title {
   font-size: 1.35rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .detail-sub {
@@ -125,7 +125,7 @@
 .section-label {
   font-size: 0.88rem;
   font-weight: 800;
-  color: var(--accent-cyan);
+  color: var(--accent-teal);
   letter-spacing: 0.05em;
 }
 
@@ -136,11 +136,11 @@
 }
 
 .code-panel {
-  background: hsla(220, 25%, 10%, 0.85);
+  background: var(--bg-surface);
   padding: 16px 20px;
   border-radius: 10px;
-  border: 1px solid var(--border-glass);
-  color: #fff;
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
   font-size: 0.88rem;
   overflow-x: auto;
 }
@@ -151,7 +151,7 @@
 }
 
 .detail-footer {
-  border-top: 1px solid var(--border-glass);
+  border-top: 1px solid var(--border-light);
   padding-top: 18px;
   font-size: 0.84rem;
   color: var(--text-secondary);

@@ -1,44 +1,48 @@
-/* Vindicator Security Control Plane - HSL Dark Mode Glassmorphism Design System */
+/* Vindicator Security Control Plane - Premium Enterprise Dark Theme */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
+
 :root {
-  /* HSL Core Tokens */
-  --bg-root: hsl(225, 25%, 7%);
-  --bg-surface: hsl(225, 22%, 11%);
-  --bg-card: hsla(225, 22%, 15%, 0.65);
-  --bg-card-hover: hsla(225, 25%, 20%, 0.85);
-  --border-glass: hsla(220, 15%, 45%, 0.18);
-  --border-glass-glow: hsla(195, 90%, 55%, 0.35);
+  /* HSL Core Tokens - Dark Theme */
+  --bg-root: hsl(222, 47%, 7%);       /* Charcoal slate */
+  --bg-surface: hsl(222, 47%, 11%);    /* Slightly lighter panel background */
+  --bg-card: hsla(222, 47%, 16%, 0.6); /* Glassmorphism card */
+  --bg-card-hover: hsla(222, 47%, 20%, 0.8);
+  
+  /* Borders */
+  --border-light: hsla(184, 100%, 25%, 0.2);
+  --border-focus: hsl(184, 100%, 45%); /* Neon Cyan Accent */
 
   /* Typography Colors */
-  --text-primary: hsl(220, 25%, 95%);
-  --text-secondary: hsl(220, 15%, 70%);
-  --text-muted: hsl(220, 12%, 50%);
+  --text-primary: hsl(210, 20%, 98%);
+  --text-secondary: hsl(215, 16%, 70%);
+  --text-muted: hsl(215, 16%, 50%);
 
-  /* Neon Accent Tokens */
-  --accent-cyan: hsl(195, 95%, 55%);
-  --accent-cyan-bg: hsla(195, 95%, 55%, 0.12);
-  --accent-blue: hsl(215, 95%, 60%);
-  --accent-purple: hsl(270, 85%, 65%);
+  /* Accent Tokens (Neon Teal/Cyan) */
+  --accent-teal: hsl(184, 100%, 40%); 
+  --accent-teal-hover: hsl(184, 100%, 55%);
+  --accent-teal-bg: hsla(184, 100%, 40%, 0.15);
 
-  /* Severity HSL Tokens */
-  --sev-critical: hsl(350, 88%, 62%);
-  --sev-critical-bg: hsla(350, 88%, 62%, 0.14);
-  --sev-critical-border: hsla(350, 88%, 62%, 0.35);
+  /* Severity Tokens - optimized for dark mode */
+  --sev-critical: hsl(348, 83%, 65%);
+  --sev-critical-bg: hsla(348, 83%, 47%, 0.15);
+  --sev-critical-border: hsla(348, 83%, 65%, 0.4);
 
-  --sev-high: hsl(28, 95%, 58%);
-  --sev-high-bg: hsla(28, 95%, 58%, 0.14);
-  --sev-high-border: hsla(28, 95%, 58%, 0.35);
+  --sev-high: hsl(24, 94%, 60%);
+  --sev-high-bg: hsla(24, 94%, 50%, 0.15);
+  --sev-high-border: hsla(24, 94%, 60%, 0.4);
 
-  --sev-medium: hsl(45, 92%, 54%);
-  --sev-medium-bg: hsla(45, 92%, 54%, 0.14);
-  --sev-medium-border: hsla(45, 92%, 54%, 0.35);
+  --sev-medium: hsl(43, 96%, 60%);
+  --sev-medium-bg: hsla(43, 96%, 48%, 0.15);
+  --sev-medium-border: hsla(43, 96%, 60%, 0.4);
 
-  --sev-low: hsl(158, 82%, 52%);
-  --sev-low-bg: hsla(158, 82%, 52%, 0.14);
-  --sev-low-border: hsla(158, 82%, 52%, 0.35);
+  --sev-low: hsl(152, 69%, 45%);
+  --sev-low-bg: hsla(152, 69%, 31%, 0.15);
+  --sev-low-border: hsla(152, 69%, 45%, 0.4);
 
   /* Font Families */
-  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
 }
 
 * {
@@ -49,11 +53,6 @@
 
 body {
   background-color: var(--bg-root);
-  background-image: 
-    radial-gradient(at 15% 15%, hsla(215, 90%, 55%, 0.08) 0px, transparent 50%),
-    radial-gradient(at 85% 20%, hsla(270, 85%, 60%, 0.08) 0px, transparent 50%),
-    radial-gradient(at 50% 90%, hsla(195, 95%, 55%, 0.06) 0px, transparent 60%);
-  background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-sans);
   min-height: 100vh;
@@ -61,7 +60,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Custom Sleek Dark Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -70,89 +68,90 @@ body {
   background: var(--bg-root);
 }
 ::-webkit-scrollbar-thumb {
-  background: hsla(220, 15%, 35%, 0.4);
+  background: var(--border-light);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsla(220, 15%, 50%, 0.6);
+  background: var(--accent-teal);
 }
 
-/* Glassmorphism Utilities */
+/* Professional Cards (Dark Theme & Glassmorphism) */
 .glass-card {
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border-glass);
-  border-radius: 14px;
-  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 16px hsla(0, 0%, 0%, 0.2);
 }
 
 .glass-card:hover {
   background: var(--bg-card-hover);
-  border-color: var(--border-glass-glow);
-  box-shadow: 0 12px 32px hsla(0, 0%, 0%, 0.35), 0 0 15px hsla(195, 90%, 55%, 0.12);
+  border-color: var(--border-focus);
+  box-shadow: 0 8px 24px hsla(184, 100%, 25%, 0.15);
   transform: translateY(-2px);
 }
 
 .glass-panel {
-  background: hsla(225, 22%, 13%, 0.75);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--border-glass);
-  border-radius: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
 }
 
-/* Neon Badges */
+/* Headings */
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  color: var(--text-primary);
+  font-weight: 600;
+  text-shadow: 0 2px 4px hsla(0,0%,0%,0.5);
+}
+
+/* Status Badges */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.badge-critical {
-  background: var(--sev-critical-bg);
-  color: var(--sev-critical);
-  border: 1px solid var(--sev-critical-border);
-  box-shadow: 0 0 10px hsla(350, 88%, 62%, 0.2);
-}
+.badge-critical { background: var(--sev-critical-bg); color: var(--sev-critical); border: 1px solid var(--sev-critical-border); }
+.badge-high { background: var(--sev-high-bg); color: var(--sev-high); border: 1px solid var(--sev-high-border); }
+.badge-medium { background: var(--sev-medium-bg); color: var(--sev-medium); border: 1px solid var(--sev-medium-border); }
+.badge-low { background: var(--sev-low-bg); color: var(--sev-low); border: 1px solid var(--sev-low-border); }
+.badge-cyan { background: var(--accent-teal-bg); color: var(--accent-teal); border: 1px solid hsla(184, 100%, 40%, 0.3); }
 
-.badge-high {
-  background: var(--sev-high-bg);
-  color: var(--sev-high);
-  border: 1px solid var(--sev-high-border);
+/* Buttons */
+.btn-primary {
+  background: var(--accent-teal);
+  color: var(--bg-root);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 10px hsla(184, 100%, 40%, 0.2);
 }
-
-.badge-medium {
-  background: var(--sev-medium-bg);
-  color: var(--sev-medium);
-  border: 1px solid var(--sev-medium-border);
-}
-
-.badge-low {
-  background: var(--sev-low-bg);
-  color: var(--sev-low);
-  border: 1px solid var(--sev-low-border);
-}
-
-.badge-cyan {
-  background: var(--accent-cyan-bg);
-  color: var(--accent-cyan);
-  border: 1px solid hsla(195, 95%, 55%, 0.35);
+.btn-primary:hover {
+  background: var(--accent-teal-hover);
+  box-shadow: 0 0 15px hsla(184, 100%, 40%, 0.4);
 }
 
 /* Micro animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Typography utilities */

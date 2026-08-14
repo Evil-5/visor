@@ -58,3 +58,132 @@
     text-align: center;
   }
 }
+
+/* Jobs Tracker Widget */
+.jobs-tracker {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.jobs-header {
+  background: var(--bg-card);
+  margin-bottom: 16px;
+  font-family: var(--font-sans);
+}
+
+.jobs-header h4 {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.jobs-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.job-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.job-asset-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 12px;
+}
+
+.job-asset-name {
+  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.job-scanners {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scanner-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.scanner-name {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.scanner-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+
+.scanner-status.completed {
+  color: var(--sev-low);
+}
+
+.scanner-status.in_progress, .scanner-status.running {
+  color: var(--accent-teal);
+}
+
+.scanner-status.failed {
+  color: var(--sev-critical);
+}
+
+.status-icon {
+  width: 14px;
+  height: 14px;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.spinning {
+  animation: spin 2s linear infinite;
+}
+
+/* Global Toast Notification */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1100;
+}
+
+.toast {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  padding: 12px 24px;
+  border-radius: 6px;
+  border: 1px solid var(--border-glass-glow);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  font-weight: 500;
+}

@@ -1,16 +1,11 @@
-<header class="navbar-glass">
+<header class="navbar-light">
   <div class="nav-container">
     <!-- Brand / Logo -->
-    <div class="brand" (click)="selectTab('dashboard')">
-      <div class="logo-shield">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" class="shield-icon">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
+    <div class="brand" routerLink="/dashboard" style="display: flex; align-items: center;">
+      <img src="assets/visor-logo.jpg" alt="VISOR Logo" style="height: 45px; margin-right: 15px; border-radius: 6px;" />
       <div class="brand-text">
         <span class="brand-title">VINDICATOR</span>
-        <span class="brand-subtitle">SECURITY CONTROL PLANE</span>
+        <span class="brand-subtitle">VISOR &bull; Intelligent Security Orchestration & Remediation</span>
       </div>
     </div>
 
@@ -18,45 +13,34 @@
     <nav class="nav-links">
       <button 
         class="nav-tab" 
-        [class.active]="activeTab === 'dashboard'" 
-        (click)="selectTab('dashboard')">
-        <span class="tab-icon">📊</span>
+        routerLink="/dashboard" 
+        routerLinkActive="active">
         <span>Executive Dashboard</span>
       </button>
       <button 
         class="nav-tab" 
-        [class.active]="activeTab === 'findings'" 
-        (click)="selectTab('findings')">
-        <span class="tab-icon">🛡️</span>
+        routerLink="/findings" 
+        routerLinkActive="active">
         <span>Findings Explorer</span>
       </button>
       <button 
         class="nav-tab" 
-        [class.active]="activeTab === 'remediation'" 
-        (click)="selectTab('remediation')">
-        <span class="tab-icon">⚡</span>
-        <span>Automated Remediation &amp; AI Hub</span>
+        routerLink="/remediation" 
+        routerLinkActive="active">
+        <span>Automated Remediation</span>
       </button>
       <button 
         class="nav-tab" 
-        [class.active]="activeTab === 'config'" 
-        (click)="selectTab('config')">
-        <span class="tab-icon">⚙️</span>
+        routerLink="/config" 
+        routerLinkActive="active">
         <span>Scanners &amp; Exclusions</span>
       </button>
     </nav>
 
     <!-- Right Controls -->
     <div class="nav-actions">
-      <div class="status-pill">
-        <span class="pulse-dot"></span>
-        <span>CONTROL PLANE ONLINE</span>
-      </div>
-      <button class="btn-scan" (click)="onRunScan()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
-          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <span>Run Scan Pipeline</span>
+      <button class="btn-primary" (click)="onOpenScanModal()">
+        <span>Run Scan</span>
       </button>
     </div>
   </div>

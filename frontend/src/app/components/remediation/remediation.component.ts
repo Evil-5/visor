@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RemediationSuggestionDto } from '../../models/security.model';
+import { AppStateService } from '../../services/state.service';
 
 @Component({
   selector: 'app-remediation',
@@ -10,8 +11,15 @@ import { RemediationSuggestionDto } from '../../models/security.model';
   styleUrls: ['./remediation.component.css']
 })
 export class RemediationComponent {
-  @Input() automatedList: RemediationSuggestionDto[] = [];
-  @Input() aiTaskList: RemediationSuggestionDto[] = [];
+  state = inject(AppStateService);
+
+  get automatedList(): RemediationSuggestionDto[] {
+    return this.state.automatedList();
+  }
+
+  get aiTaskList(): RemediationSuggestionDto[] {
+    return this.state.aiTaskList();
+  }
 
   activeSubTab: 'renovate' | 'openrewrite' | 'ai' = 'renovate';
   copiedItem: string | null = null;

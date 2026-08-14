@@ -41,9 +41,10 @@ export interface RemediationSuggestionDto {
 export interface ScanJob {
   jobId: string;
   asset: string;
-  scanner: string;
-  status: 'QUEUED' | 'RUNNING' | 'COMPLETED' | 'FAILED' | string;
-  totalFindingsCount: number;
+  scannersRun?: string[];
+  scannerStatuses?: { [scannerName: string]: string };
+  status: 'QUEUED' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED' | string;
+  findingsCount?: number;
   startedAt: string;
   completedAt?: string;
   errorMessage?: string;
